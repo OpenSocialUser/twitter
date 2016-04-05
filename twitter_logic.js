@@ -33,7 +33,7 @@ function renderTwitter() {
 
     checkIfOwner();
 
-    var iframeHeight = document.getElementById("twitter-widget-0").offsetHeight;
+    var iframeHeight = document.getElementById("twitter-widget-0").offsetHeight + 20;
 
     gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
