@@ -16,9 +16,11 @@ function renderTwitter() {
 
     checkIfOwner();
 
-    gadgets.window.adjustHeight();
+    var iframeHeight = document.getElementById("twitter-widget-0").offsetHeight;
+
+    gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
-        gadgets.window.adjustHeight();
+        gadgets.window.adjustHeight(iframeHeight);
     }, 1500);
 }
 
