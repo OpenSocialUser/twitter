@@ -8,6 +8,23 @@ function toObject(str) {
     return gadgets.json.parse(str);
 }
 
+function checkIfOwner() {
+    var userId = null;
+    var ownerId = null;
+
+    osapi.people.getViewer().execute(function(data) {
+        userId = data.id;
+        osapi.people.getOwner().execute(function(data) {
+            ownerId = data.id;
+            if (ownerId != null && userId != null && ownerId == userId) {
+                isOwner = true;
+            } else {
+                isOwner = false;
+            }
+        });
+    });
+}
+
 function renderTwitter() {
     if (!wave.getState()) {
         return;
