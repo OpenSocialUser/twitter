@@ -87,6 +87,7 @@ function insertTimeline(timeline) {
     var timeline = state.get('timeline');
 
     var html = "";
+    var htmlFooter = "";
 
     if (timeline == "test") {
         html += testTimeline;
@@ -94,7 +95,12 @@ function insertTimeline(timeline) {
         html += hybrisTimeline;
     }
 
+    if (isOwner) {
+        htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
+    }
+
     document.getElementById('body').innerHTML = html;
+    document.getElementById('footer').innerHTML = htmlFooter;
 }
 
 function renderTwitter() {
