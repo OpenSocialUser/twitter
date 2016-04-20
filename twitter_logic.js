@@ -80,8 +80,6 @@ function saveTimeline() {
 }
 
 function insertTimeline(timeline) {
-    var twitterScript = "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>";
-    
     var testTimeline = "<a class='twitter-timeline' href='https://twitter.com/OpenSocialUser' data-widget-id='717304595446439936'>Твиты от @OpenSocialUser</a>";
     var hybrisTimeline = "<a class='twitter-timeline'  href='https://twitter.com/saphybris' data-widget-id='702191997369643009'>Tweets by @saphybris</a>";
 
@@ -95,8 +93,6 @@ function insertTimeline(timeline) {
     } else if (timeline == "hybris") {
         html += hybrisTimeline;
     }
-
-    html += twitterScript;
 
     document.getElementById('body').innerHTML = html;
 }
