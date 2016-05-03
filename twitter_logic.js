@@ -101,6 +101,10 @@ function insertTimeline(timeline) {
 
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
+
+    twttr.widgets.load(
+        document.getElementById('body')
+    );
 }
 
 function renderTwitter() {
