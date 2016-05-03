@@ -130,7 +130,21 @@ function renderTwitter() {
         }
     }
 
-    var iframeHeight = document.getElementById("twitter-widget-0").offsetHeight + 20;
+    var twitterWidgetHeight = 0;
+    var divs = document.getElementsByTagName("div");
+    for (var i = divs.length; i;) {
+        var div = divs[--i];
+        if (div.id.indexOf("twitter-widget") > -1) {
+            twitterWidgetHeight = div.offsetHeight + 20;
+        }
+    }
+
+    var iframeHeight = 0;
+    if (twitterWidgetHeight == 0) {
+        iframeHeight = 300;
+    } else {
+        iframeHeight = twitterWidgetHeight;
+    }
 
     gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
