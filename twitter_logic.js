@@ -131,17 +131,17 @@ function renderTwitter() {
     }
 
     var twitterWidgetHeight = 0;
-    var divs = document.getElementsByTagName("div");
-    for (var i = divs.length; i;) {
-        var div = divs[--i];
-        if (div.id.indexOf("twitter-widget") > -1) {
+    var frames = document.getElementsByTagName("iframe");
+    for (var i = frames.length; i;) {
+        var frame = frames[--i];
+        if (frame.id.indexOf("twitter-widget") > -1) {
             twitterWidgetHeight = div.offsetHeight + 20;
         }
     }
 
     var iframeHeight = 0;
     if (twitterWidgetHeight == 0) {
-        iframeHeight = 300;
+        iframeHeight = 500;
     } else {
         iframeHeight = twitterWidgetHeight;
     }
