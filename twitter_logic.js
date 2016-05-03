@@ -135,7 +135,7 @@ function renderTwitter() {
     for (var i = frames.length; i;) {
         var frame = frames[--i];
         if (frame.id.indexOf("twitter-widget") > -1) {
-            twitterWidgetHeight = div.offsetHeight + 20;
+            twitterWidgetHeight = frame.offsetHeight + 20;
         }
     }
 
