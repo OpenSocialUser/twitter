@@ -148,7 +148,7 @@ function renderTwitter() {
 
     gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
-        gadgets.window.adjustHeight(iframeHeight);
+        gadgets.window.adjustHeight();
     }, 1500);
 }
 
