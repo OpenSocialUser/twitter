@@ -14,7 +14,7 @@ function checkIfOwner() {
 
     osapi.people.getViewer().execute(function(data) {
         userId = data.id;
-        console.log(userId);
+
         osapi.people.getOwner().execute(function(data) {
             ownerId = data.id;
             if (ownerId != null && userId != null && ownerId == userId) {
