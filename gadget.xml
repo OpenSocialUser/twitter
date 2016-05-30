@@ -6,6 +6,6 @@
     	<Require feature="osapi"/>
     	<Require feature="dynamic-height"/>
     </ModulePrefs>
-    <Content type="html" href="http://rawgit.com/OpenSocialUser/twitter/master/twitter.html">
+    <Content type="html" href="http://opensocialuser.github.io/twitter/twitter.html">
     </Content>
 </Module>

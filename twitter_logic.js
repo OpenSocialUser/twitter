@@ -35,17 +35,8 @@ function renderEditPage() {
     var htmlFooter = "";
 
     html += "<p style='font-size: 14px;'>Choose Twitter timeline from list:</p>";
-    if (timeline != null && timeline != "") {
-        html += "<select id='timeline_select'>";
-        if (timeline == "test") {
-            html += "<option value='test' selected>Test</option>";
-            html += "<option value='hybris'>Hybris</option>";
-        } else if (timeline == "hybris") {
-            html += "<option value='test'>Test</option>";
-            html += "<option value='hybris' selected>Hybris</option>";
-        }
-        html += "</select>";
-    } else {
+    //if (timeline != null && timeline != "") {
+    //} else {
         html += "<select id='timeline_select'>";
         html += "<option value='saphybris'>@saphybris</option>";
         html += "<option value='SAPPHIRENOW'>@SAPPHIRENOW</option>";
@@ -55,7 +46,7 @@ function renderEditPage() {
         html += "<option value='BillRMcDermott'>@BillRMcDermott</option>";
         html += "<option value='SAP'>@SAP</option>";
         html += "</select>";
-    }
+    //}
 
     html += "</br>";
 
