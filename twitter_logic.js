@@ -157,10 +157,10 @@ function renderTwitter() {
         iframeHeight = twitterWidgetHeight;
     }
 
-    gadgets.window.adjustHeight(iframeHeight);
+    /*gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
         gadgets.window.adjustHeight();
-    }, 1500);
+    }, 1500);*/
 }
 
 function init() {
