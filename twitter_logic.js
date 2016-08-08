@@ -1,4 +1,5 @@
 var isOwner = false;
+var linkCheck = null;
 
 function toJSON(obj) { 
 	return gadgets.json.stringify(obj); 
@@ -116,6 +117,22 @@ function insertTimeline(timeline) {
     twttr.widgets.load(
         document.getElementById('body')
     );
+
+    if (linkCheck == null) {
+        linkCheck = setInterval(function() {
+            fixTwitterLinks();
+        }, 2000);
+    }
+}
+
+function fixTwitterLinks() {
+    var footers = document.getElementsByClassName('timeline-Footer');
+    for (i = 0; i < footers.length; i++) {
+        var links = footers[i].getElementsByTagName('a');
+        for (j = 0; j < links.length; j++) {
+            links[j].target = "_blank";
+        }
+    }
 }
 
 function renderTwitter() {
