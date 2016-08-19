@@ -45,6 +45,7 @@ function renderEditPage() {
         html += "<option value='saphcp'>@saphcp</option>";
         html += "<option value='BillRMcDermott'>@BillRMcDermott</option>";
         html += "<option value='SAP'>@SAP</option>";
+        html += "<option value='SAPAriba'>@SAPAriba</option>";
         html += "</select>";
     //}
 
@@ -76,12 +77,13 @@ function saveTimeline() {
 }
 
 function insertTimeline(timeline) {
-    var saphybris = "<a class='twitter-timeline' href='https://twitter.com/saphybris' data-widget-id='727823334650593281'>Tweets by @saphybris</a>";
-    var SAPPHIRENOW = "<a class='twitter-timeline' href='https://twitter.com/SAPPHIRENOW' data-widget-id='737250519270498305'>Tweets by @SAPPHIRENOW</a>";
-    var SAPSocial = "<a class='twitter-timeline' href='https://twitter.com/SAPSocial' data-widget-id='737251282608619520'>Tweets by @SAPSocial</a>";
-    var saphcp = "<a class='twitter-timeline' href='https://twitter.com/saphcp' data-widget-id='737251552482693121'>Tweets by @saphcp</a>";
-    var BillRMcDermott = "<a class='twitter-timeline' href='https://twitter.com/BillRMcDermott' data-widget-id='737251873682526208'>Tweets by @BillRMcDermott</a>";
-    var SAP = "<a class='twitter-timeline' href='https://twitter.com/SAP' data-widget-id='737252109201092608'>Tweets by @SAP</a>";
+    var saphybris = "<a class='twitter-timeline' href='https://twitter.com/saphybris'>Tweets by @saphybris</a>";
+    var SAPPHIRENOW = "<a class='twitter-timeline' href='https://twitter.com/SAPPHIRENOW'>Tweets by @SAPPHIRENOW</a>";
+    var SAPSocial = "<a class='twitter-timeline' href='https://twitter.com/SAPSocial'>Tweets by @SAPSocial</a>";
+    var saphcp = "<a class='twitter-timeline' href='https://twitter.com/saphcp'>Tweets by @saphcp</a>";
+    var BillRMcDermott = "<a class='twitter-timeline' href='https://twitter.com/BillRMcDermott'>Tweets by @BillRMcDermott</a>";
+    var SAP = "<a class='twitter-timeline' href='https://twitter.com/SAP'>Tweets by @SAP</a>";
+    var SAPAriba = "<a class='twitter-timeline' href='https://twitter.com/SAPAriba'>Tweets by SAPAriba</a>";
 
     var state = wave.getState();
     var timeline = state.get('timeline');
@@ -101,6 +103,8 @@ function insertTimeline(timeline) {
         html += BillRMcDermott;
     } else if (timeline == "SAP") {
         html += SAP;
+    } else if (timeline == "SAPAriba") {
+        html += SAPAriba;
     }
 
     if (isOwner) {
