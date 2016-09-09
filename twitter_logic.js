@@ -46,6 +46,7 @@ function renderEditPage() {
         html += "<option value='BillRMcDermott'>@BillRMcDermott</option>";
         html += "<option value='SAP'>@SAP</option>";
         html += "<option value='SAPAriba'>@SAPAriba</option>";
+        html += "<option value='SuccessFactors'>@SuccessFactors</option>";
         html += "</select>";
     //}
 
@@ -84,6 +85,7 @@ function insertTimeline(timeline) {
     var BillRMcDermott = "<a class='twitter-timeline' href='https://twitter.com/BillRMcDermott'>Tweets by @BillRMcDermott</a>";
     var SAP = "<a class='twitter-timeline' href='https://twitter.com/SAP'>Tweets by @SAP</a>";
     var SAPAriba = "<a class='twitter-timeline' href='https://twitter.com/SAPAriba'>Tweets by SAPAriba</a>";
+    var SuccessFactors = "<a class='twitter-timeline' href='https://twitter.com/SuccessFactors'>Tweets by SuccessFactors</a>";
 
     var state = wave.getState();
     var timeline = state.get('timeline');
@@ -105,6 +107,8 @@ function insertTimeline(timeline) {
         html += SAP;
     } else if (timeline == "SAPAriba") {
         html += SAPAriba;
+    } else if (timeline == "SuccessFactors") {
+        html += SuccessFactors;
     }
 
     if (isOwner) {
