@@ -1,8 +1,8 @@
 var isOwner = false;
 var linkCheck = null;
 
-function toJSON(obj) { 
-	return gadgets.json.stringify(obj); 
+function toJSON(obj) {
+	return gadgets.json.stringify(obj);
 }
 
 function toObject(str) {
@@ -47,6 +47,19 @@ function renderEditPage() {
         html += "<option value='SAP'>@SAP</option>";
         html += "<option value='SAPAriba'>@SAPAriba</option>";
         html += "<option value='SuccessFactors'>@SuccessFactors</option>";
+        html += "<option value='SAPDigitalSvcs'>@SAPDigitalSvcs </option>";
+        html += "<option value='SAPPartnerEdge'>@SAPPartnerEdge</option>";
+        html += "<option value='SAPInMemory'>@SAPInMemory</option>";
+        html += "<option value='SAPAnalytics'>@SAPAnalytics</option>";
+        html += "<option value='SAPCommNet'>@SAPCommNet</option>";
+        html += "<option value='sapnews'>@sapnews</option>";
+        html += "<option value='SAPTechEd'>@SAPTechEd</option>";
+        html += "<option value='SAPMentors'>@SAPMentors</option>";
+        html += "<option value='SAPMillMining'>@SAPMillMining</option>";
+        html += "<option value='SAP_IoT'>@SAP_IoT</option>";
+        html += "<option value='SAPMENA'>@SAPMENA</option>";
+        html += "<option value='SAPforBanking'>@SAPforBanking</option>";
+        html += "<option value='SAP_Retail'>@SAP_Retail</option>";
         html += "</select>";
     //}
 
@@ -84,8 +97,21 @@ function insertTimeline(timeline) {
     var saphcp = "<a class='twitter-timeline' href='https://twitter.com/saphcp'>Tweets by @saphcp</a>";
     var BillRMcDermott = "<a class='twitter-timeline' href='https://twitter.com/BillRMcDermott'>Tweets by @BillRMcDermott</a>";
     var SAP = "<a class='twitter-timeline' href='https://twitter.com/SAP'>Tweets by @SAP</a>";
-    var SAPAriba = "<a class='twitter-timeline' href='https://twitter.com/SAPAriba'>Tweets by SAPAriba</a>";
-    var SuccessFactors = "<a class='twitter-timeline' href='https://twitter.com/SuccessFactors'>Tweets by SuccessFactors</a>";
+    var SAPAriba = "<a class='twitter-timeline' href='https://twitter.com/SAPAriba'>Tweets by @SAPAriba</a>";
+    var SuccessFactors = "<a class='twitter-timeline' href='https://twitter.com/SuccessFactors'>Tweets by @SuccessFactors</a>";
+    var SAPDigitalSvcs = "<a class='twitter-timeline' href='https://twitter.com/SAPDigitalSvcs'>Tweets by @SAPDigitalSvcs</a>";
+    var SAPPartnerEdge = "<a class='twitter-timeline' href='https://twitter.com/SAPPartnerEdge'>Tweets by @SAPPartnerEdge</a>";
+    var SAPInMemory = "<a class='twitter-timeline' href='https://twitter.com/SAPInMemory'>Tweets by @SAPInMemory</a>";
+    var SAPAnalytics = "<a class='twitter-timeline' href='https://twitter.com/SAPAnalytics'>Tweets by @SAPAnalytics</a>";
+    var SAPCommNet = "<a class='twitter-timeline' href='https://twitter.com/SAPCommNet'>Tweets by @SAPCommNet</a>";
+    var sapnews = "<a class='twitter-timeline' href='https://twitter.com/sapnews'>Tweets by @sapnews</a>";
+    var SAPTechEd = "<a class='twitter-timeline' href='https://twitter.com/SAPTechEd'>Tweets by @SAPTechEd</a>";
+    var SAPMentors = "<a class='twitter-timeline' href='https://twitter.com/SAPMentors'>Tweets by @SAPMentors</a>";
+    var SAPMillMining = "<a class='twitter-timeline' href='https://twitter.com/SAPMillMining'>Tweets by @SAPMillMining</a>";
+    var SAP_IoT = "<a class='twitter-timeline' href='https://twitter.com/SAP_IoT'>Tweets by @SAP_IoT</a>";
+    var SAPMENA = "<a class='twitter-timeline' href='https://twitter.com/SAPMENA'>Tweets by @SAPMENA</a>";
+    var SAPforBanking = "<a class='twitter-timeline' href='https://twitter.com/SAPforBanking'>Tweets by @SAPforBanking</a>";
+    var SAP_Retail = "<a class='twitter-timeline' href='https://twitter.com/SAP_Retail'>Tweets by @SAP_Retail</a>";
 
     var state = wave.getState();
     var timeline = state.get('timeline');
@@ -109,6 +135,32 @@ function insertTimeline(timeline) {
         html += SAPAriba;
     } else if (timeline == "SuccessFactors") {
         html += SuccessFactors;
+    } else if (timeline == "SAPDigitalSvcs") {
+        html += SAPDigitalSvcs;
+    } else if (timeline == "SAPPartnerEdge") {
+        html += SAPPartnerEdge;
+    } else if (timeline == "SAPInMemory") {
+        html += SAPInMemory;
+    } else if (timeline == "SAPAnalytics") {
+        html += SAPAnalytics;
+    } else if (timeline == "SAPCommNet") {
+        html += SAPCommNet;
+    } else if (timeline == "sapnews") {
+        html += sapnews;
+    } else if (timeline == "SAPTechEd") {
+        html += SAPTechEd;
+    } else if (timeline == "SAPMentors") {
+        html += SAPMentors;
+    } else if (timeline == "SAPMillMining") {
+        html += SAPMillMining;
+    } else if (timeline == "SAP_IoT") {
+        html += SAP_IoT;
+    } else if (timeline == "SAPMENA") {
+        html += SAPMENA;
+    } else if (timeline == "SAPforBanking") {
+        html += SAPforBanking;
+    } else if (timeline == "SAP_Retail") {
+        html += SAP_Retail;
     }
 
     if (isOwner) {
