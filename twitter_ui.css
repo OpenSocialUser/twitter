@@ -32,3 +32,11 @@
 #editButton {
 	margin-top: 10px;
 }
+
+#editButtonIcon {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 22px;
+	height: 22px;
+	background-image: url('http://opensocialuser.github.io/settings_icon.png');
+}

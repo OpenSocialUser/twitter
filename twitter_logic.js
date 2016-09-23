@@ -164,7 +164,8 @@ function insertTimeline(timeline) {
     }
 
     if (isOwner) {
-        htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
+        //htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
+        htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
     }
 
     document.getElementById('body').innerHTML = html;
