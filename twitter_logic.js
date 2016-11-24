@@ -241,7 +241,7 @@ function init() {
     if (wave && wave.isInWaveContainer()) {
         wave.setStateCallback(renderTwitter);
 
-        wave.setParticipantCallback(renderTwitter);
+        // wave.setParticipantCallback(renderTwitter);
     }
 }
 
