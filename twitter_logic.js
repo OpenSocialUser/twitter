@@ -110,10 +110,10 @@ function insertTimeline(timeline) {
     var html = "";
     var htmlFooter = "";
 
-    if (timeline_type == 'user_timeline') {
-        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
-    } else if (timeline_type == 'search') {
+    if (timeline_type == 'search') {
         html += "<a class='twitter-timeline' href='https://twitter.com/hashtag/"+timeline+"'>Tweets by #"+timeline+"</a>";
+    } else {
+        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
     }
 
     if (isOwner) {
