@@ -84,6 +84,10 @@ function renderEditPage() {
 
     $('#timeline_select').value = timeline_type;
     renderTimelineInput(timeline_type);
+
+    $('#timeline_select').onchange = function() {
+        renderTimelineInput(this.value);
+    }
 }
 
 function saveTimeline() {
@@ -182,10 +186,6 @@ function renderTwitter() {
     setTimeout(function(){
         gadgets.window.adjustHeight();
     }, 1500);*/
-}
-
-$('#timeline_select').onchange = function() {
-    renderTimelineInput(this.value);
 }
 
 function init() {
