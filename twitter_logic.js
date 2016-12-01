@@ -36,7 +36,7 @@ function renderTimelineInput(timeline_type) {
     if (timeline_type == 'search') {
         html += "<p style='font-size: 14px;'>Enter widget ID:</p>";
         if (widgetId != null && widgetId != '') {
-            html += "<input id='timeline' type='text' value='" + widgetId + "'/>";
+            html += "<input id='widget_id' type='text' value='" + widgetId + "'/>";
         } else {
             html += "<input id='timeline' type='text' value=''/>";
         }
@@ -90,7 +90,7 @@ function renderEditPage() {
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
 
-    if (timeline_type != null && timeline_type != '') {
+    if (timeline_type == null && timeline_type == '') {
         timeline_type = 'user_timeline';
     }
 
