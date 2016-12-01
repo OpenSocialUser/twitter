@@ -30,9 +30,16 @@ function checkIfOwner() {
 function renderTimelineInput(timeline_type) {
     var state = wave.getState();
     var timeline = state.get('timeline');
+    var widgetId = state.get('widget_id');
 
     var html = '';
     if (timeline_type == 'search') {
+        html += "<p style='font-size: 14px;'>Enter widget ID:</p>";
+        if (widgetId != null && widgetId != '') {
+            html += "<input id='timeline' type='text' value='" + widgetId + "'/>";
+        } else {
+            html += "<input id='timeline' type='text' value=''/>";
+        }
         html += "<p style='font-size: 14px;'>Enter Hashtag Timeline:</p>";
         html += "<label style='margin-right: 3px;'>#</label>";
     } else {
@@ -83,6 +90,10 @@ function renderEditPage() {
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
 
+    if (timeline_type != null && timeline_type != '') {
+        timeline_type = 'user_timeline';
+    }
+
     document.getElementById('timeline_type').value = timeline_type;
     renderTimelineInput(timeline_type);
 
@@ -96,6 +107,11 @@ function saveTimeline() {
     var timeline = document.getElementById('timeline').value;
     var timeline_type = document.getElementById('timeline_type').value;
 
+    if (timeline_type == 'search') {
+        var widgetId = document.getElementById('widget_id').value;
+        state.submitDelta({'widget_id' : widgetId});
+    }
+
     state.submitDelta({'timeline' : timeline});
     state.submitDelta({'timeline_type' : timeline_type});
 
@@ -106,12 +122,13 @@ function insertTimeline(timeline) {
     var state = wave.getState();
     var timeline = state.get('timeline');
     var timeline_type = state.get('timeline_type');
+    var widgetId = state.get('widget_id');
 
     var html = "";
     var htmlFooter = "";
 
     if (timeline_type == 'search') {
-        html += "<a class='twitter-timeline' href='https://twitter.com/hashtag/"+timeline+"'>Tweets by #"+timeline+"</a>";
+        html += "<a class='twitter-timeline' href='https://twitter.com/hashtag/"+timeline+"' data-widget-id='"+widgetId+"'>Tweets by #"+timeline+"</a>";
     } else {
         html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
     }
