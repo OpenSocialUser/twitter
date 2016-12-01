@@ -62,6 +62,7 @@ function renderEditPage() {
     html += "<select id='timeline_type'>";
     html += "<option value='user_timeline'>User Timeline</option>";
     html += "<option value='search' selected>Search</option>";
+    html += "</select>"
 
     html += "<div id='timeline_input_container'></div>"
 
