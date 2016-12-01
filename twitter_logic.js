@@ -38,7 +38,7 @@ function renderTimelineInput(timeline_type) {
         if (widgetId != null && widgetId != '') {
             html += "<input id='widget_id' type='text' value='" + widgetId + "'/>";
         } else {
-            html += "<input id='timeline' type='text' value=''/>";
+            html += "<input id='widget_id' type='text' value=''/>";
         }
         html += "<p style='font-size: 14px;'>Enter Hashtag Timeline:</p>";
         html += "<label style='margin-right: 3px;'>#</label>";
