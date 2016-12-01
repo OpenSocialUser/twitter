@@ -27,46 +27,48 @@ function checkIfOwner() {
     });
 }
 
+function renderTimelineInput(timeline_type) {
+    var state = wave.getState();
+    var timeline = state.get('timeline');
+
+    var html = '';
+    if (timeline_type == 'search') {
+        html += "<p style='font-size: 14px;'>Enter Hashtag Timeline:</p>";
+        html += "<label style='margin-right: 3px;'>#</label>";
+    } else {
+        html += "<p style='font-size: 14px;'>Enter User Timeline:</p>";
+        html += "<label style='margin-right: 3px;'>@</label>";
+    }
+
+    if (timeline != null && timeline != '') {
+        html += "<input id='timeline' type='text' value='" + timeline + "'/>";
+    } else {
+        html += "<input id='timeline' type='text' value=''/>";
+    }
+
+    document.getElementById('timeline_input_container').innerHTML = html;
+}
+
 function renderEditPage() {
     var state = wave.getState();
     var timeline = state.get('timeline');
+    var timeline_type = state.get('timeline_type');
 
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
 
-    html += "<p style='font-size: 14px;'>Choose Twitter timeline from list:</p>";
-    //if (timeline != null && timeline != "") {
-    //} else {
-        html += "<select id='timeline_select'>";
-        html += "<option value='saphybris'>@saphybris</option>";
-        html += "<option value='SAPPHIRENOW'>@SAPPHIRENOW</option>";
-        html += "<option value='SAPSocial'>@SAPSocial</option>";
-        html += "<option value='saphcp'>@saphcp</option>";
-        html += "<option value='BillRMcDermott'>@BillRMcDermott</option>";
-        html += "<option value='SAP'>@SAP</option>";
-        html += "<option value='SAPAriba'>@SAPAriba</option>";
-        html += "<option value='SuccessFactors'>@SuccessFactors</option>";
-        html += "<option value='SAPDigitalSvcs'>@SAPDigitalSvcs </option>";
-        html += "<option value='SAPPartnerEdge'>@SAPPartnerEdge</option>";
-        html += "<option value='SAPInMemory'>@SAPInMemory</option>";
-        html += "<option value='SAPAnalytics'>@SAPAnalytics</option>";
-        html += "<option value='SAPCommNet'>@SAPCommNet</option>";
-        html += "<option value='sapnews'>@sapnews</option>";
-        html += "<option value='SAPTechEd'>@SAPTechEd</option>";
-        html += "<option value='SAPMentors'>@SAPMentors</option>";
-        html += "<option value='SAPMillMining'>@SAPMillMining</option>";
-        html += "<option value='SAP_IoT'>@SAP_IoT</option>";
-        html += "<option value='SAPMENA'>@SAPMENA</option>";
-        html += "<option value='SAPforBanking'>@SAPforBanking</option>";
-        html += "<option value='SAP_Retail'>@SAP_Retail</option>";
-        html += "</select>";
-    //}
+    html += "<p style='font-size: 14px;'>Select timeline type:</p>";
+    html += "<select id='timeline_type'>";
+    html += "<option value='user_timeline'>User Timeline</option>";
+    html += "<option value='search' selected>Search</option>";
+
+    html += "<div id='timeline_input_container'></div>"
 
     html += "</br>";
 
-    html += "<button id='saveButton' onclick='saveTimeline()''>Save</button>";
-    html += "<button id='cancelButton' onclick='renderTwitter()''>Cancel</button>";
+    html += "<button id='saveButton' onclick='saveTimeline()'>Save</button>";
+    html += "<button id='cancelButton' onclick='renderTwitter()'>Cancel</button>";
 
     html += "<p>";
     html += "Please report issues to IT direct component ";
@@ -79,92 +81,37 @@ function renderEditPage() {
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
+
+    $('#timeline_select').value = timeline_type;
+    renderTimelineInput(timeline_type);
 }
 
 function saveTimeline() {
     var state = wave.getState();
-    var timeline = document.getElementById('timeline_select').value;
+    var timeline = $('#timeline').val();
+    var timeline_type = $('#timeline_select').value;
 
     state.submitDelta({'timeline' : timeline});
+    state.submitDelta({'timeline_type' : timeline_type});
 
     renderTwitter();
 }
 
 function insertTimeline(timeline) {
-    var saphybris = "<a class='twitter-timeline' href='https://twitter.com/saphybris'>Tweets by @saphybris</a>";
-    var SAPPHIRENOW = "<a class='twitter-timeline' href='https://twitter.com/SAPPHIRENOW'>Tweets by @SAPPHIRENOW</a>";
-    var SAPSocial = "<a class='twitter-timeline' href='https://twitter.com/SAPSocial'>Tweets by @SAPSocial</a>";
-    var saphcp = "<a class='twitter-timeline' href='https://twitter.com/saphcp'>Tweets by @saphcp</a>";
-    var BillRMcDermott = "<a class='twitter-timeline' href='https://twitter.com/BillRMcDermott'>Tweets by @BillRMcDermott</a>";
-    var SAP = "<a class='twitter-timeline' href='https://twitter.com/SAP'>Tweets by @SAP</a>";
-    var SAPAriba = "<a class='twitter-timeline' href='https://twitter.com/SAPAriba'>Tweets by @SAPAriba</a>";
-    var SuccessFactors = "<a class='twitter-timeline' href='https://twitter.com/SuccessFactors'>Tweets by @SuccessFactors</a>";
-    var SAPDigitalSvcs = "<a class='twitter-timeline' href='https://twitter.com/SAPDigitalSvcs'>Tweets by @SAPDigitalSvcs</a>";
-    var SAPPartnerEdge = "<a class='twitter-timeline' href='https://twitter.com/SAPPartnerEdge'>Tweets by @SAPPartnerEdge</a>";
-    var SAPInMemory = "<a class='twitter-timeline' href='https://twitter.com/SAPInMemory'>Tweets by @SAPInMemory</a>";
-    var SAPAnalytics = "<a class='twitter-timeline' href='https://twitter.com/SAPAnalytics'>Tweets by @SAPAnalytics</a>";
-    var SAPCommNet = "<a class='twitter-timeline' href='https://twitter.com/SAPCommNet'>Tweets by @SAPCommNet</a>";
-    var sapnews = "<a class='twitter-timeline' href='https://twitter.com/sapnews'>Tweets by @sapnews</a>";
-    var SAPTechEd = "<a class='twitter-timeline' href='https://twitter.com/SAPTechEd'>Tweets by @SAPTechEd</a>";
-    var SAPMentors = "<a class='twitter-timeline' href='https://twitter.com/SAPMentors'>Tweets by @SAPMentors</a>";
-    var SAPMillMining = "<a class='twitter-timeline' href='https://twitter.com/SAPMillMining'>Tweets by @SAPMillMining</a>";
-    var SAP_IoT = "<a class='twitter-timeline' href='https://twitter.com/SAP_IoT'>Tweets by @SAP_IoT</a>";
-    var SAPMENA = "<a class='twitter-timeline' href='https://twitter.com/SAPMENA'>Tweets by @SAPMENA</a>";
-    var SAPforBanking = "<a class='twitter-timeline' href='https://twitter.com/SAPforBanking'>Tweets by @SAPforBanking</a>";
-    var SAP_Retail = "<a class='twitter-timeline' href='https://twitter.com/SAP_Retail'>Tweets by @SAP_Retail</a>";
-
     var state = wave.getState();
     var timeline = state.get('timeline');
+    var timeline_type = state.get('timeline_type');
 
     var html = "";
     var htmlFooter = "";
 
-    if (timeline == "saphybris") {
-        html += saphybris;
-    } else if (timeline == "SAPPHIRENOW") {
-        html += SAPPHIRENOW;
-    } else if (timeline == "SAPSocial") {
-        html += SAPSocial;
-    } else if (timeline == "saphcp") {
-        html += saphcp;
-    } else if (timeline == "BillRMcDermott") {
-        html += BillRMcDermott;
-    } else if (timeline == "SAP") {
-        html += SAP;
-    } else if (timeline == "SAPAriba") {
-        html += SAPAriba;
-    } else if (timeline == "SuccessFactors") {
-        html += SuccessFactors;
-    } else if (timeline == "SAPDigitalSvcs") {
-        html += SAPDigitalSvcs;
-    } else if (timeline == "SAPPartnerEdge") {
-        html += SAPPartnerEdge;
-    } else if (timeline == "SAPInMemory") {
-        html += SAPInMemory;
-    } else if (timeline == "SAPAnalytics") {
-        html += SAPAnalytics;
-    } else if (timeline == "SAPCommNet") {
-        html += SAPCommNet;
-    } else if (timeline == "sapnews") {
-        html += sapnews;
-    } else if (timeline == "SAPTechEd") {
-        html += SAPTechEd;
-    } else if (timeline == "SAPMentors") {
-        html += SAPMentors;
-    } else if (timeline == "SAPMillMining") {
-        html += SAPMillMining;
-    } else if (timeline == "SAP_IoT") {
-        html += SAP_IoT;
-    } else if (timeline == "SAPMENA") {
-        html += SAPMENA;
-    } else if (timeline == "SAPforBanking") {
-        html += SAPforBanking;
-    } else if (timeline == "SAP_Retail") {
-        html += SAP_Retail;
+    if (timeline_type == 'user_timeline') {
+        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
+    } else if (timeline_type == 'search') {
+        html += "<a class='twitter-timeline' href='https://twitter.com/hashtag/"+timeline+"'>Tweets by #"+timeline+"</a>";
     }
 
     if (isOwner) {
-        //htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
         htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
     }
 
@@ -237,11 +184,13 @@ function renderTwitter() {
     }, 1500);*/
 }
 
+$('#timeline_select').onchange = function() {
+    renderTimelineInput(this.value);
+}
+
 function init() {
     if (wave && wave.isInWaveContainer()) {
         wave.setStateCallback(renderTwitter);
-
-        // wave.setParticipantCallback(renderTwitter);
     }
 }
 
