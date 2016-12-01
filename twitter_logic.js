@@ -82,10 +82,10 @@ function renderEditPage() {
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
 
-    $('#timeline_select').value = timeline_type;
+    document.getElementById('timeline_type').value = timeline_type;
     renderTimelineInput(timeline_type);
 
-    $('#timeline_select').onchange = function() {
+    document.getElementById('timeline_type').onchange = function() {
         renderTimelineInput(this.value);
     }
 }
@@ -93,7 +93,7 @@ function renderEditPage() {
 function saveTimeline() {
     var state = wave.getState();
     var timeline = $('#timeline').val();
-    var timeline_type = $('#timeline_select').value;
+    var timeline_type = $('#timeline_type').value;
 
     state.submitDelta({'timeline' : timeline});
     state.submitDelta({'timeline_type' : timeline_type});
