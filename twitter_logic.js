@@ -93,8 +93,8 @@ function renderEditPage() {
 
 function saveTimeline() {
     var state = wave.getState();
-    var timeline = $('#timeline').val();
-    var timeline_type = $('#timeline_type').value;
+    var timeline = document.getElementById('timeline').value;
+    var timeline_type = document.getElementById('timeline_type').value;
 
     state.submitDelta({'timeline' : timeline});
     state.submitDelta({'timeline_type' : timeline_type});
