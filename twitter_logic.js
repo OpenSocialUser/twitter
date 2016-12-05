@@ -113,7 +113,7 @@ function validateInput(input) {
         passed = r.test(input.value);
     }
 
-    if (!passed)
+    if (!passed) {
         document.getElementsByClassName("twitter_input")[0].style.borderColor = 'red';
         document.getElementById('error_txt').style.display = 'block';
         document.getElementById('saveButton').disabled = true;
