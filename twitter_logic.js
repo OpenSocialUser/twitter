@@ -38,19 +38,16 @@ function renderTimelineInput(timeline_type) {
         if (widgetId != null && widgetId != '') {
             html += "<input id='widget_id' type='text' value='" + widgetId + "'/>";
         } else {
-            html += "<input id='widget_id' type='text' value=''/>";
+            html += "<input id='widget_id' type='text'/>";
         }
-        html += "<p style='font-size: 14px;'>Enter Hashtag Timeline:</p>";
-        html += "<label style='margin-right: 3px;'>#</label>";
     } else {
         html += "<p style='font-size: 14px;'>Enter User Timeline:</p>";
-        html += "<label style='margin-right: 3px;'>@</label>";
-    }
-
-    if (timeline != null && timeline != '') {
-        html += "<input id='timeline' type='text' value='" + timeline + "'/>";
-    } else {
-        html += "<input id='timeline' type='text' value=''/>";
+        placeholder = '@timeline'
+        if (timeline != null && timeline != '') {
+            html += "<input id='timeline' type='text' value='"+timeline+"' placeholder='"+placeholder+"'/>";
+        } else {
+            html += "<input id='timeline' type='text' placeholder='"+placeholder+"'/>";
+        }
     }
 
     document.getElementById('timeline_input_container').innerHTML = html;
@@ -104,17 +101,19 @@ function renderEditPage() {
 
 function saveTimeline() {
     var state = wave.getState();
-    var timeline = document.getElementById('timeline').value;
     var timeline_type = document.getElementById('timeline_type').value;
 
     if (timeline_type == 'search') {
         var widgetId = document.getElementById('widget_id').value;
         state.submitDelta({'widget_id' : widgetId});
+        state.submitDelta({'timeline' : ''});
+    } else {
+        var timeline = document.getElementById('timeline').value;
+        state.submitDelta({'timeline' : timeline});
+        state.submitDelta({'widget_id' : ''});
     }
 
-    state.submitDelta({'timeline' : timeline});
     state.submitDelta({'timeline_type' : timeline_type});
-
     renderTwitter();
 }
 
@@ -128,7 +127,7 @@ function insertTimeline(timeline) {
     var htmlFooter = "";
 
     if (timeline_type == 'search') {
-        html += "<a class='twitter-timeline' href='https://twitter.com/hashtag/"+timeline+"' data-widget-id='"+widgetId+"'>Tweets by #"+timeline+"</a>";
+        html += "<a class='twitter-timeline' data-widget-id='"+widgetId+"'>Tweets by widgetId "+widgetId+"</a>";
     } else {
         html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
     }
