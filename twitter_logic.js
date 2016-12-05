@@ -36,19 +36,22 @@ function renderTimelineInput(timeline_type) {
     if (timeline_type == 'search') {
         html += "<p style='font-size: 14px;'>Enter widget ID:</p>";
         if (widgetId != null && widgetId != '') {
-            html += "<input id='widget_id' type='text' value='" + widgetId + "'/>";
+            html += "<input id='widget_id' class='twitter_input' type='text' value='" + widgetId + "'/>";
         } else {
-            html += "<input id='widget_id' type='text'/>";
+            html += "<input id='widget_id' class='twitter_input' type='text'/>";
         }
+        msg = 'Invalid. Only digits are allowed.';
     } else {
         html += "<p style='font-size: 14px;'>Enter User Timeline:</p>";
         placeholder = '@timeline'
         if (timeline != null && timeline != '') {
-            html += "<input id='timeline' type='text' value='"+timeline+"' placeholder='"+placeholder+"'/>";
+            html += "<input id='timeline' class='twitter_input' type='text' value='"+timeline+"' placeholder='"+placeholder+"'/>";
         } else {
-            html += "<input id='timeline' type='text' placeholder='"+placeholder+"'/>";
+            html += "<input id='timeline' class='twitter_input' type='text' placeholder='"+placeholder+"'/>";
         }
+        msg = 'Invalid. Enter timeline with @';
     }
+    html += "<span id='error_txt' style='display: none;'>"+msg+"</span>"
 
     document.getElementById('timeline_input_container').innerHTML = html;
 }
@@ -94,9 +97,32 @@ function renderEditPage() {
     document.getElementById('timeline_type').value = timeline_type;
     renderTimelineInput(timeline_type);
 
-    document.getElementById('timeline_type').onchange = function() {
-        renderTimelineInput(this.value);
+    document.getElementById('timeline_type').onchange = function(){ renderTimelineInput(this.value); }
+    document.getElementById('timeline').onblur = function(){ validateInput(this); }
+    document.getElementById('widget_id').onblur = function(){ validateInput(this); }
+}
+
+function validateInput(input) {
+    var passed = false;
+    message = ''
+    if (input.id == 'timeline') {
+        var r = /^@[a-z,0-9,_]{1,15}$/i;
+        passed = r.test(input.value);
+    } else if (input.id == 'widget_id') {
+        var r = /^\d+$/;
+        passed = r.test(input.value);
     }
+
+    if (!passed)
+        document.getElementsByClassName("twitter_input")[0].style.borderColor = 'red';
+        document.getElementById('error_txt').style.display = 'block';
+        document.getElementById('saveButton').disabled = true;
+    } else {
+        document.getElementsByClassName("twitter_input")[0].style.borderColor = '';
+        document.getElementById('error_txt').style.display = 'none';
+        document.getElementById('saveButton').disabled = false;
+    }
+    return passed;
 }
 
 function saveTimeline() {
@@ -129,7 +155,7 @@ function insertTimeline() {
     if (timeline_type == 'search') {
         html += "<a class='twitter-timeline' data-widget-id='"+widgetId+"'>Tweets by widgetId "+widgetId+"</a>";
     } else {
-        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by @"+timeline+"</a>";
+        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by "+timeline+"</a>";
     }
 
     if (isOwner) {

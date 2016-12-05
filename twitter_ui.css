@@ -40,3 +40,8 @@
 	height: 22px;
 	background-image: url('http://opensocialuser.github.io/settings_icon.png');
 }
+
+#error_txt {
+	color: #ff0000;
+	font-size: 13px;
+}
