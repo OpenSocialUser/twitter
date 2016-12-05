@@ -54,6 +54,12 @@ function renderTimelineInput(timeline_type) {
     html += "<span id='error_txt' style='display: none;'>"+msg+"</span>"
 
     document.getElementById('timeline_input_container').innerHTML = html;
+
+    if (timeline_type == 'search') {
+        document.getElementById('widget_id').onblur = function(){ validateInput(this); }
+    } else {
+        document.getElementById('timeline').onblur = function(){ validateInput(this); }
+    }
 }
 
 function renderEditPage() {
@@ -98,8 +104,6 @@ function renderEditPage() {
     renderTimelineInput(timeline_type);
 
     document.getElementById('timeline_type').onchange = function(){ renderTimelineInput(this.value); }
-    document.getElementById('timeline').onblur = function(){ validateInput(this); }
-    document.getElementById('widget_id').onblur = function(){ validateInput(this); }
 }
 
 function validateInput(input) {
