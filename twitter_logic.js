@@ -117,7 +117,7 @@ function saveTimeline() {
     renderTwitter();
 }
 
-function insertTimeline(timeline) {
+function insertTimeline() {
     var state = wave.getState();
     var timeline = state.get('timeline');
     var timeline_type = state.get('timeline_type');
@@ -166,11 +166,12 @@ function renderTwitter() {
     }
     var state = wave.getState();
     var timeline = state.get('timeline');
+    var widgetId = state.get('widget_id');
 
     checkIfOwner();
 
-    if (timeline != null && timeline != "") {
-        insertTimeline(timeline);
+    if ((timeline != null && timeline != "") || (widgetId != null && widgetId != "")) {
+        insertTimeline();
     } else {
         if (isOwner) {
            renderEditPage();
