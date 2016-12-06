@@ -198,27 +198,23 @@ function insertTimeline() {
         target = {sourceType: 'profile', screenName: timeline.substring(1)};
     }
     var frame = {};
-    twttr.widgets.createTimeline(target, body, options).then(function(f) { frame = f });
-
-    twttr.ready(function (twttr) {
-        if (frame == null) {
-            renderEditPage(true);
-        } else {
-            if (timelineType == 'search') {
-                twttr.events.bind('rendered', adjustSize());
-                adjustSize();
+    twttr.widgets.createTimeline(target, body, options).then(function(f) {
+        twttr.ready(function (twttr) {
+            if (f == null) {
+                renderEditPage(true);
             } else {
-                twttr.events.bind('rendered', adjustSize(500));
-                adjustSize(500);
+                if (timelineType == 'search') {
+                    adjustSize();
+                } else {
+                    adjustSize(500);
+                }
             }
-        }
+        });
     });
 
     // twttr.widgets.load(
     //     document.getElementById('body')
     // );
-
-
 
     // if (linkCheck == null) {
     //     linkCheck = setInterval(function() {
