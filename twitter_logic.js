@@ -205,9 +205,9 @@ function insertTimeline() {
             renderEditPage(true);
         } else {
             if (timelineType == 'search') {
-                twttr.events.bind('rendered', adjustSize);
+                adjustSize();
             } else {
-                twttr.events.bind('rendered', adjustSize(500));
+                adjustSize(500);
             }
         }
     });
