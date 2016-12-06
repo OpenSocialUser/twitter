@@ -193,7 +193,7 @@ function insertTimeline() {
     if (timelineType == 'search') {
         target = {sourceType: 'widget', widgetId: widgetId};
     } else {
-        target = {sourceType: 'profile', screenName: timeline};
+        target = {sourceType: 'profile', screenName: timeline.substring(1)};
     }
     var options = {width: '100%'};
     twttr.widgets.createTimeline(target, body, options).then(
