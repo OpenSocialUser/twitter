@@ -69,7 +69,7 @@ function renderEditPage(withError = false) {
     if (withError) {
         html += "<p style='color: #ff0000;'>Provided input is not valid timeline!</p>"
     }
-    html += "<p style='font-size: 14px;'>Select timeline type:</p>";
+    html += "<p class='label'>Select timeline type:</p>";
     html += "<select id='timeline_type'>";
     html += "<option value='user_timeline'>User Timeline</option>";
     html += "<option value='search' selected>Widget ID Timeline</option>";
@@ -205,8 +205,10 @@ function insertTimeline() {
             renderEditPage(true);
         } else {
             if (timelineType == 'search') {
+                twttr.events.bind('rendered', adjustSize());
                 adjustSize();
             } else {
+                twttr.events.bind('rendered', adjustSize(500));
                 adjustSize(500);
             }
         }
