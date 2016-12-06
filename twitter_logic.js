@@ -186,7 +186,7 @@ function insertTimeline() {
     document.getElementById('footer').innerHTML = htmlFooter;
 
     twttr.widgets.load(
-        document.getElementById('body');
+        document.getElementById('body')
     );
 
     twttr.ready(function (twttr) {
