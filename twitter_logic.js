@@ -33,33 +33,28 @@ function renderTimelineInput(timeline_type) {
     var widgetId = state.get('widget_id');
 
     var html = '';
+    var msg = '';
     if (timeline_type == 'search') {
-        html += "<p style='font-size: 14px;'>Enter widget ID:</p>";
+        html += "<p class='label'>Enter widget ID:</p>";
         if (widgetId != null && widgetId != '') {
-            html += "<input id='widget_id' class='twitter_input' type='text' value='" + widgetId + "'/>";
+            html += "<input id='widget_id' class='twitter-input' type='text' value='" + widgetId + "'/>";
         } else {
-            html += "<input id='widget_id' class='twitter_input' type='text'/>";
+            html += "<input id='widget_id' class='twitter-input' type='text'/>";
         }
         msg = 'Invalid. Only digits are allowed.';
     } else {
-        html += "<p style='font-size: 14px;'>Enter User Timeline:</p>";
+        html += "<p class='label'>Enter User Timeline:</p>";
         placeholder = '@timeline'
         if (timeline != null && timeline != '') {
-            html += "<input id='timeline' class='twitter_input' type='text' value='"+timeline+"' placeholder='"+placeholder+"'/>";
+            html += "<input id='timeline' class='twitter-input' type='text' value='"+timeline+"' placeholder='"+placeholder+"'/>";
         } else {
-            html += "<input id='timeline' class='twitter_input' type='text' placeholder='"+placeholder+"'/>";
+            html += "<input id='timeline' class='twitter-input' type='text' placeholder='"+placeholder+"'/>";
         }
         msg = 'Invalid. Enter timeline with @';
     }
     html += "<span id='error_txt' style='display: none;'>"+msg+"</span>"
 
     document.getElementById('timeline_input_container').innerHTML = html;
-
-    if (timeline_type == 'search') {
-        document.getElementById('widget_id').onblur = function(){ validateInput(this); }
-    } else {
-        document.getElementById('timeline').onblur = function(){ validateInput(this); }
-    }
 }
 
 function renderEditPage() {
@@ -74,7 +69,7 @@ function renderEditPage() {
     html += "<p style='font-size: 14px;'>Select timeline type:</p>";
     html += "<select id='timeline_type'>";
     html += "<option value='user_timeline'>User Timeline</option>";
-    html += "<option value='search' selected>Search</option>";
+    html += "<option value='search' selected>Widget ID Timeline</option>";
     html += "</select>"
 
     html += "<div id='timeline_input_container'></div>"
@@ -106,9 +101,12 @@ function renderEditPage() {
     document.getElementById('timeline_type').onchange = function(){ renderTimelineInput(this.value); }
 }
 
-function validateInput(input) {
+function validateInput() {
+    var el = document.getElementsByClassName('twitter-input');
+    if (el == null && el.length < 1) return false;
+
+    var input = el[0];
     var passed = false;
-    message = ''
     if (input.id == 'timeline') {
         var r = /^@[a-z,0-9,_]{1,15}$/i;
         passed = r.test(input.value);
@@ -118,18 +116,36 @@ function validateInput(input) {
     }
 
     if (!passed) {
-        document.getElementsByClassName("twitter_input")[0].style.borderColor = 'red';
+        input.style.borderStyle='solid';
+        input.style.borderColor = 'red';
         document.getElementById('error_txt').style.display = 'block';
-        document.getElementById('saveButton').disabled = true;
     } else {
-        document.getElementsByClassName("twitter_input")[0].style.borderColor = '';
+        input.style.borderStyle='';
+        input.style.borderColor = '';
         document.getElementById('error_txt').style.display = 'none';
-        document.getElementById('saveButton').disabled = false;
     }
     return passed;
 }
 
+function handleNoTweets() {
+    var el = document.getElementsByClassName('twitter-timeline-error');
+    if (el != null && el.length > 0) {
+        var a = el[0];
+        var id = a.dataset.widgetId;
+        var url = a.href;
+        if (id != null) {
+            a.text = 'There is no timeline by widget ID "'+id+'". Please check widget settings.';
+        } else if (url != null) {
+            a.removeAttribute('href');
+            var t = url.split('/').pop();
+            a.text = 'There is no timeline "'+t+'". Please check widget settings.';
+        }
+    }
+}
+
 function saveTimeline() {
+    if (!validateInput()) return;
+
     var state = wave.getState();
     var timeline_type = document.getElementById('timeline_type').value;
 
@@ -170,14 +186,19 @@ function insertTimeline() {
     document.getElementById('footer').innerHTML = htmlFooter;
 
     twttr.widgets.load(
-        document.getElementById('body')
+        document.getElementById('body');
     );
 
-    if (linkCheck == null) {
-        linkCheck = setInterval(function() {
-            fixTwitterLinks();
-        }, 2000);
-    }
+    twttr.ready(function (twttr) {
+        twttr.events.bind('rendered', handleNoTweets);
+        twttr.events.bind('rendered', fixTwitterLinks);
+    });
+
+    // if (linkCheck == null) {
+    //     linkCheck = setInterval(function() {
+    //         fixTwitterLinks();
+    //     }, 2000);
+    // }
 }
 
 function fixTwitterLinks() {
@@ -191,9 +212,8 @@ function fixTwitterLinks() {
 }
 
 function renderTwitter() {
-    if (!wave.getState()) {
-        return;
-    }
+    if (!wave.getState()) return;
+
     var state = wave.getState();
     var timeline = state.get('timeline');
     var widgetId = state.get('widget_id');
@@ -214,21 +234,21 @@ function renderTwitter() {
         }
     }
 
-    var twitterWidgetHeight = 0;
-    var frames = document.getElementsByTagName("iframe");
-    for (var i = frames.length; i;) {
-        var frame = frames[--i];
-        if (frame.id.indexOf("twitter-widget") > -1) {
-            twitterWidgetHeight = frame.offsetHeight + 20;
-        }
-    }
+    // var twitterWidgetHeight = 0;
+    // var frames = document.getElementsByTagName("iframe");
+    // for (var i = frames.length; i;) {
+    //     var frame = frames[--i];
+    //     if (frame.id.indexOf("twitter-widget") > -1) {
+    //         twitterWidgetHeight = frame.offsetHeight + 20;
+    //     }
+    // }
 
-    var iframeHeight = 0;
-    if (twitterWidgetHeight == 0) {
-        iframeHeight = 520;
-    } else {
-        iframeHeight = twitterWidgetHeight;
-    }
+    // var iframeHeight = 0;
+    // if (twitterWidgetHeight == 0) {
+    //     iframeHeight = 520;
+    // } else {
+    //     iframeHeight = twitterWidgetHeight;
+    // }
 
     /*gadgets.window.adjustHeight(iframeHeight);
     setTimeout(function(){
