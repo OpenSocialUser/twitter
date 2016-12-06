@@ -57,7 +57,7 @@ function renderTimelineInput(timeline_type) {
     document.getElementById('timeline_input_container').innerHTML = html;
 }
 
-function renderEditPage() {
+function renderEditPage(withError = false) {
     var state = wave.getState();
     var timeline = state.get('timeline');
     var timeline_type = state.get('timeline_type');
@@ -66,6 +66,9 @@ function renderEditPage() {
     var htmlHeader = "";
     var htmlFooter = "";
 
+    if (withError) {
+        html += "<p style='color: #ff0000;'>Provided input is not valid timeline!</p>"
+    }
     html += "<p style='font-size: 14px;'>Select timeline type:</p>";
     html += "<select id='timeline_type'>";
     html += "<option value='user_timeline'>User Timeline</option>";
@@ -127,21 +130,21 @@ function validateInput() {
     return passed;
 }
 
-function handleNoTweets() {
-    var el = document.getElementsByClassName('twitter-timeline-error');
-    if (el != null && el.length > 0) {
-        var a = el[0];
-        var id = a.dataset.widgetId;
-        var url = a.href;
-        if (id != null) {
-            a.text = 'There is no timeline by widget ID "'+id+'". Please check widget settings.';
-        } else if (url != null) {
-            a.removeAttribute('href');
-            var t = url.split('/').pop();
-            a.text = 'There is no timeline "'+t+'". Please check widget settings.';
-        }
-    }
-}
+// function handleNoTweets() {
+//     var el = document.getElementsByClassName('twitter-timeline-error');
+//     if (el != null && el.length > 0) {
+//         var a = el[0];
+//         var id = a.dataset.widgetId;
+//         var url = a.href;
+//         if (id != null) {
+//             a.text = 'There is no timeline by widget ID "'+id+'". Please check widget settings.';
+//         } else if (url != null) {
+//             a.removeAttribute('href');
+//             var t = url.split('/').pop();
+//             a.text = 'There is no timeline "'+t+'". Please check widget settings.';
+//         }
+//     }
+// }
 
 function saveTimeline() {
     if (!validateInput()) return;
@@ -166,33 +169,53 @@ function saveTimeline() {
 function insertTimeline() {
     var state = wave.getState();
     var timeline = state.get('timeline');
-    var timeline_type = state.get('timeline_type');
+    var timelineType = state.get('timeline_type');
     var widgetId = state.get('widget_id');
 
-    var html = "";
-    var htmlFooter = "";
+    // var html = "";
+    var htmlFooter = '';
 
-    if (timeline_type == 'search') {
-        html += "<a class='twitter-timeline' data-widget-id='"+widgetId+"'>Tweets by widgetId "+widgetId+"</a>";
-    } else {
-        html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by "+timeline+"</a>";
-    }
+    // if (timelineType == 'search') {
+    //     html += "<a class='twitter-timeline' data-widget-id='"+widgetId+"'>Tweets by widgetId "+widgetId+"</a>";
+    // } else {
+    //     html += "<a class='twitter-timeline' href='https://twitter.com/"+timeline+"'>Tweets by "+timeline+"</a>";
+    // }
 
     if (isOwner) {
         htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
     }
 
-    document.getElementById('body').innerHTML = html;
+    var body = document.getElementById('body');
+    body.innerHTML = '';
     document.getElementById('footer').innerHTML = htmlFooter;
 
-    twttr.widgets.load(
-        document.getElementById('body')
+    var target = {};
+    if (timelineType == 'search') {
+        target = {sourceType: 'widget', widgetId: widgetId};
+    } else {
+        target = {sourceType: 'profile', screenName: timeline};
+    }
+    var options = {width: '100%'};
+    twttr.widgets.createTimeline(target, body, options).then(
+        function (frame) {
+            if (frame == null) {
+                renderEditPage(true);
+            } else {
+                gadgets.window.adjustHeight();
+                // fixTwitterLinks();
+            }
+        }
     );
 
-    twttr.ready(function (twttr) {
-        twttr.events.bind('rendered', handleNoTweets);
-        twttr.events.bind('rendered', fixTwitterLinks);
-    });
+    // twttr.widgets.load(
+    //     document.getElementById('body')
+    // );
+
+    // twttr.ready(function (twttr) {
+    //     twttr.events.bind('rendered', handleNoTweets);
+    //     twttr.events.bind('rendered', fixTwitterLinks);
+    //     twttr.events.bind('rendered', adjustSize);
+    // });
 
     // if (linkCheck == null) {
     //     linkCheck = setInterval(function() {
@@ -201,15 +224,15 @@ function insertTimeline() {
     // }
 }
 
-function fixTwitterLinks() {
-    var footers = document.getElementsByClassName('timeline-Footer');
-    for (i = 0; i < footers.length; i++) {
-        var links = footers[i].getElementsByTagName('a');
-        for (j = 0; j < links.length; j++) {
-            links[j].target = "_blank";
-        }
-    }
-}
+// function fixTwitterLinks() {
+//     var footers = document.getElementsByClassName('timeline-Footer');
+//     for (i = 0; i < footers.length; i++) {
+//         var links = footers[i].getElementsByTagName('a');
+//         for (j = 0; j < links.length; j++) {
+//             links[j].target = "_blank";
+//         }
+//     }
+// }
 
 function renderTwitter() {
     if (!wave.getState()) return;
