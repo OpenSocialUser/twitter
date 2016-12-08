@@ -57,7 +57,7 @@ function validateInput() {
     var passed = false;
     var msg = '';
     if (input.id == 'timeline') {
-        var r = /^@[a-z,0-9,_]{1,15}$/i;
+        var r = /^@[a-z0-9_]{1,15}$/i;
         passed = r.test(input.value);
         msg = 'Invalid. Enter timeline with @';
     } else if (input.id == 'widget_id') {
