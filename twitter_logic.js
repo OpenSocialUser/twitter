@@ -15,19 +15,15 @@ function checkIfOwner() {
 
     var userId = null;
     var ownerId = null;
-    osapi.people.getOwner().execute(function(data) { ownerId = data.id; });
-    osapi.people.getViewer().execute(function(data) { userId = data.id; });
-
-    // if (userId == null || ownerId == null) {
-    //     setTimeout(function() {
-    //         userId = getViewerId();
-    //         ownerId = getOwnerId();
-    //     }, 2000)
-    // }
-
-    if (ownerId != null && userId != null) {
-        isOwner = (ownerId == userId);
-    }
+    osapi.people.getOwner().execute(function(data) {
+        ownerId = data.id;
+        osapi.people.getViewer().execute(function(data) {
+            userId = data.id;
+            if (ownerId != null && userId != null) {
+                isOwner = (ownerId == userId);
+            }
+        });
+    });
 }
 
 function getState() {
