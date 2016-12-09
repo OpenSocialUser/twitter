@@ -1,5 +1,6 @@
-var isOwner = false;
+var isOwner = null;
 var linkCheck = null;
+var isOnSave = false;
 
 function toJSON(obj) {
 	return gadgets.json.stringify(obj);
@@ -9,22 +10,34 @@ function toObject(str) {
     return gadgets.json.parse(str);
 }
 
-function checkIfOwner() {
-    var userId = null;
-    var ownerId = null;
+function getOwnerId() {
+    osapi.people.getOwner().execute(function(data) {
+        return data.id;
+    }
+}
 
+function getViewrId() {
     osapi.people.getViewer().execute(function(data) {
-        userId = data.id;
+        return data.id;
+    }
+}
 
-        osapi.people.getOwner().execute(function(data) {
-            ownerId = data.id;
-            if (ownerId != null && userId != null && ownerId == userId) {
-                isOwner = true;
-            } else {
-                isOwner = false;
-            }
-        });
-    });
+function checkIfOwner() {
+    if (isOwner != null) return;
+
+    var userId = getViewrId();
+    var ownerId = getOwnerId();
+
+    if (userId == null || ownerId == null) {
+        setTimeout(function() {
+            userId = getViewrId();
+            ownerId = getOwnerId();
+        }, 2000)
+    }
+
+    if (ownerId != null && userId != null) {
+        isOwner = (ownerId == userId);
+    } else isOwner = false;
 }
 
 function getState() {
@@ -47,6 +60,12 @@ function adjustSize(size) {
     } else {
         gadgets.window.adjustHeight();
     }
+}
+
+function getTimelineName(timeline) {
+    if (timeline.substring(0,1) == '@') {
+        return timeline.substring(1);
+    } else return timeline;
 }
 
 function validateInput() {
@@ -90,10 +109,54 @@ function receiveTimeline(timelineType, timeline) {
     if (timelineType == 'widget_timeline') {
         target = {sourceType: 'widget', widgetId: timeline};
     } else {
-        target = {sourceType: 'profile', screenName: timeline.substring(1)};
+        target = {sourceType: 'profile', screenName: getTimelineName(timeline)};
     }
     hidden_el = document.getElementById('hidden_div');
     return twttr.widgets.createTimeline(target, hidden_el);
+}
+
+function renderEditButton() {
+    checkIfOwner();
+    if (!isOwner) return;
+
+    var footer = document.getElementById('footer');
+    var button = document.createElement('div');
+    button.setAttribute('id', 'editButtonIcon');
+    button.setAttribute('onclick', 'renderEditPage()');
+    footer.appendChild(button);
+}
+
+function cancelEdit(state) {
+    if (state.timeline != null && state.timeline != "") insertTimeline();
+}
+
+function saveTimeline() {
+    if (!validateInput()) return;
+
+    var timeline = '';
+    var timelineType = document.getElementById('timeline_type').value;
+    if (timelineType == 'widget_timeline') {
+        timeline = document.getElementById('widget_id').value;
+    } else {
+        timeline = document.getElementById('timeline').value;
+    }
+
+    receiveTimeline(timelineType, timeline).then(function(f) {
+        document.getElementById('hidden_div').innerHTML = '';
+        handleUiErrors('The input is not existing timeline.', f != null);
+
+        if (f == null) return;
+
+        isOnSave = true;
+
+        var state = wave.getState();
+        state.submitDelta({
+            'timeline': timeline,
+            'timeline_type': timelineType
+        });
+
+        // renderTwitter();
+    });
 }
 
 function renderTimelineInput(timelineType, timeline) {
@@ -106,14 +169,21 @@ function renderTimelineInput(timelineType, timeline) {
         html += "<input id='widget_id' class='twitter-input' type='text' "+value+" />";
     } else {
         html += "<p class='label'>Enter User Timeline:</p>";
-        html += "<input id='timeline' class='twitter-input' type='text' placeholder='@timeline' "+value+" />";
+        html += "<input id='timeline' class='twitter-input' type='text' placeholder='e.g. @twitter' "+value+" />";
     }
     html += "<span id='error_txt' style='display: block;'></span>"
 
     document.getElementById('timeline_input_container').innerHTML = html;
 }
 
+function isEditPageShown() {
+    return (document.getElementById('saveButton') != null);
+}
+
 function renderEditPage() {
+    if (isEditPageShown()) return;
+
+
     var state = getState();
 
     var html = "";
@@ -130,7 +200,7 @@ function renderEditPage() {
     html += "</br>";
 
     html += "<button id='saveButton' onclick='saveTimeline()'>Save</button>";
-    html += "<button id='cancelButton' onclick='renderTwitter()'>Cancel</button>";
+    html += "<button id='cancelButton' onclick='cancelEdit(state)'>Cancel</button>";
 
     html += "<p>";
     html += "Please report issues to IT direct component ";
@@ -157,38 +227,23 @@ function renderEditPage() {
     }
 }
 
-function saveTimeline() {
-    if (!validateInput()) return;
-
-    var timeline = '';
-    var timelineType = document.getElementById('timeline_type').value;
-    if (timelineType == 'widget_timeline') {
-        timeline = document.getElementById('widget_id').value;
-    } else {
-        timeline = document.getElementById('timeline').value;
+function isTimelineShow() {
+    frames = document.getElementsByTagName('iframe');
+    for (var i = 0; i < frames.length; i++) {
+        if (frames[i].id != null && frames[i].id.indexOf('twitter-widget') > -1) return true;
     }
-
-    receiveTimeline(timelineType, timeline).then(function(f) {
-        document.getElementById('hidden_div').innerHTML = '';
-        handleUiErrors('The input is not existing timeline.', f != null);
-
-        if (f == null) return;
-
-        var state = wave.getState();
-        state.submitDelta({'timeline' : timeline});
-        state.submitDelta({'timeline_type' : timelineType});
-
-        renderTwitter();
-    });
+    return false;
 }
 
 function insertTimeline() {
+    if (isTimelineShow()) return;
+
     var state = getState();
 
-    var htmlFooter = '';
-    if (isOwner) {
-        htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
-    }
+    // var htmlFooter = '';
+    // if (isOwner) {
+    //     htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
+    // }
 
     var body = document.getElementById('body');
     body.innerHTML = '';
@@ -199,7 +254,7 @@ function insertTimeline() {
         target = {sourceType: 'widget', widgetId: state.timeline};
         options = {width: '100%'};
     } else {
-        target = {sourceType: 'profile', screenName: state.timeline.substring(1)};
+        target = {sourceType: 'profile', screenName: getTimelineName(state.timeline)};
     }
     var frame = {};
     twttr.widgets.createTimeline(target, body, options).then(function(f) {
@@ -209,29 +264,24 @@ function insertTimeline() {
             } else {
                 adjustSize(500);
             }
-            document.getElementById('footer').innerHTML = htmlFooter;
+            renderEditButton();
+            // document.getElementById('footer').innerHTML = htmlFooter;
         });
     });
 }
 
 function renderTwitter() {
-    if (!wave.getState()) return;
+    if (!wave.getState() || (!isOnSave && isEditPageShown())) return;
+
+    isOnSave = false;
 
     var state = getState();
-
-    checkIfOwner();
-
     if (state.timeline != null && state.timeline != "") {
         insertTimeline();
     } else {
+        checkIfOwner();
         if (isOwner) {
            renderEditPage();
-        } else {
-            setTimeout(function(){
-                if (isOwner) {
-                   renderEditPage();
-                }
-            }, 2000);
         }
     }
 }
