@@ -10,34 +10,24 @@ function toObject(str) {
     return gadgets.json.parse(str);
 }
 
-function getOwnerId() {
-    osapi.people.getOwner().execute(function(data) {
-        return data.id;
-    });
-}
-
-function getViewrId() {
-    osapi.people.getViewer().execute(function(data) {
-        return data.id;
-    });
-}
-
 function checkIfOwner() {
     if (isOwner != null) return;
 
-    var userId = getViewrId();
-    var ownerId = getOwnerId();
+    var userId = null;
+    var ownerId = null;
+    osapi.people.getOwner().execute(function(data) { ownerId = data.id; });
+    osapi.people.getViewer().execute(function(data) { userId = data.id; });
 
-    if (userId == null || ownerId == null) {
-        setTimeout(function() {
-            userId = getViewrId();
-            ownerId = getOwnerId();
-        }, 2000)
-    }
+    // if (userId == null || ownerId == null) {
+    //     setTimeout(function() {
+    //         userId = getViewerId();
+    //         ownerId = getOwnerId();
+    //     }, 2000)
+    // }
 
     if (ownerId != null && userId != null) {
         isOwner = (ownerId == userId);
-    } else isOwner = false;
+    }
 }
 
 function getState() {
@@ -116,8 +106,7 @@ function receiveTimeline(timelineType, timeline) {
 }
 
 function renderEditButton() {
-    checkIfOwner();
-    if (!isOwner) return;
+    if (!isOwner || document.getElementById('editButtonIcon') != null) return;
 
     var footer = document.getElementById('footer');
     var button = document.createElement('div');
@@ -236,7 +225,10 @@ function isTimelineShow() {
 }
 
 function insertTimeline() {
-    if (isTimelineShow()) return;
+    if (isTimelineShow()) {
+        renderEditButton();
+        return;
+    }
 
     var state = getState();
 
@@ -271,7 +263,9 @@ function insertTimeline() {
 }
 
 function renderTwitter() {
-    if (!wave.getState() || (!isOnSave && isEditPageShown())) return;
+    if (!wave.getState()) return;
+    checkIfOwner();
+    if (!isOnSave && isEditPageShown()) return;
 
     isOnSave = false;
 
@@ -279,7 +273,6 @@ function renderTwitter() {
     if (state.timeline != null && state.timeline != "") {
         insertTimeline();
     } else {
-        checkIfOwner();
         if (isOwner) {
            renderEditPage();
         }
