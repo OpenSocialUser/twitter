@@ -111,7 +111,8 @@ function renderEditButton() {
     footer.appendChild(button);
 }
 
-function cancelEdit(state) {
+function cancelEdit() {
+    var state = getState();
     if (state.timeline != null && state.timeline != "") insertTimeline();
 }
 
@@ -139,8 +140,6 @@ function saveTimeline() {
             'timeline': timeline,
             'timeline_type': timelineType
         });
-
-        // renderTwitter();
     });
 }
 
@@ -185,7 +184,7 @@ function renderEditPage() {
     html += "</br>";
 
     html += "<button id='saveButton' onclick='saveTimeline()'>Save</button>";
-    html += "<button id='cancelButton' onclick='cancelEdit(state)'>Cancel</button>";
+    html += "<button id='cancelButton' onclick='cancelEdit()'>Cancel</button>";
 
     html += "<p>";
     html += "Please report issues to IT direct component ";
@@ -226,18 +225,12 @@ function insertTimeline() {
         return;
     }
 
-    var state = getState();
-
-    // var htmlFooter = '';
-    // if (isOwner) {
-    //     htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
-    // }
-
     var body = document.getElementById('body');
     body.innerHTML = '';
 
     var target = {};
     var options = {};
+    var state = getState();
     if (state.timelineType == 'widget_timeline') {
         target = {sourceType: 'widget', widgetId: state.timeline};
         options = {width: '100%'};
@@ -253,7 +246,6 @@ function insertTimeline() {
                 adjustSize(500);
             }
             renderEditButton();
-            // document.getElementById('footer').innerHTML = htmlFooter;
         });
     });
 }
