@@ -13,13 +13,13 @@ function toObject(str) {
 function getOwnerId() {
     osapi.people.getOwner().execute(function(data) {
         return data.id;
-    }
+    });
 }
 
 function getViewrId() {
     osapi.people.getViewer().execute(function(data) {
         return data.id;
-    }
+    });
 }
 
 function checkIfOwner() {
