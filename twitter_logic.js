@@ -75,7 +75,9 @@ function validateInput() {
     return passed;
 }
 
-function handleUiErrors(message, clean = true) {
+function handleUiErrors(message, clean) {
+    if (clean == null) clean = true;
+
     var input = document.getElementsByClassName('twitter-input')[0];
     var span = document.getElementById('error_txt');
 
