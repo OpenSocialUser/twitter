@@ -62,7 +62,7 @@ function validateInput() {
     var passed = false;
     var msg = '';
     if (input.value == '@') {
-        mgs = 'The input is not existing timeline.';
+        msg = 'The input is not existing timeline.';
     } else if (input.id == 'timeline') {
         var r = /^@[a-z0-9_]+$/i;
         passed = r.test(input.value);
@@ -115,6 +115,21 @@ function renderEditButton() {
     footer.appendChild(button);
 }
 
+function handleSaveButton(saving) {
+    if (saving == null) saving = true;
+
+    var btn = document.getElementById('saveButton');
+    if (btn == null) return;
+
+    if (saving) {
+        btn.textContent = 'Saving...'
+        btn.disabled = true;
+    } else {
+        btn.textContent = 'Save'
+        btn.disabled = false;
+    }
+}
+
 function cancelEdit() {
     var state = getState();
     if (state.timeline != null && state.timeline != "") insertTimeline();
@@ -122,6 +137,8 @@ function cancelEdit() {
 
 function saveTimeline() {
     if (!validateInput()) return;
+
+    handleSaveButton();
 
     var timeline = '';
     var timelineType = document.getElementById('timeline_type').value;
@@ -135,7 +152,10 @@ function saveTimeline() {
         document.getElementById('hidden_div').innerHTML = '';
         handleUiErrors('The input is not existing timeline.', f != null);
 
-        if (f == null) return;
+        if (f == null) {
+            handleSaveButton(false);
+            return;
+        }
 
         isOnSave = true;
 
@@ -199,7 +219,7 @@ function renderEditPage() {
     html += "</p>";
     html += "<div id='hidden_div' style='display: none;'></div>"
 
-    htmlFooter += "<div class='help-container'><a class='help-link' href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank'>?</a></div>";
+    htmlFooter += "<div class='help-container'><a class='help-link' href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank' title='Help'>?</a></div>";
 
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
@@ -232,7 +252,12 @@ function insertTimeline() {
     }
 
     var body = document.getElementById('body');
+    var footer = document.getElementById('footer');
+    var header = document.getElementById('header');
+
     body.innerHTML = '';
+    footer.innerHTML = '';
+    header.innerHTML = '';
 
     var target = {};
     var options = {};
