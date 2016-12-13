@@ -58,12 +58,12 @@
 	border-radius: 50%;
 	border-style: solid;
 	border-width: thin;
-	border-color: black;
+	border-color: grey;
 }
 
 .help-link {
 	font-size: 18px;
 	text-decoration: none;
-	color: black;
+	color: grey;
 	font-weight: bold;
 }

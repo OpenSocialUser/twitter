@@ -191,7 +191,6 @@ function isEditPageShown() {
 function renderEditPage() {
     if (isEditPageShown()) return;
 
-
     var state = getState();
 
     var html = "";
