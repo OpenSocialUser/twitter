@@ -61,14 +61,16 @@ function validateInput() {
     var input = el[0];
     var passed = false;
     var msg = '';
-    if (input.id == 'timeline') {
-        var r = /^@[a-z0-9_]{1,15}$/i;
+    if (input.value == '@') {
+        mgs = 'The input is not existing timeline.';
+    } else if (input.id == 'timeline') {
+        var r = /^@[a-z0-9_]+$/i;
         passed = r.test(input.value);
-        msg = 'Invalid. Enter timeline with @';
+        msg = 'Timeline should start with @ and contain only digits, letters, underscores.';
     } else if (input.id == 'widget_id') {
         var r = /^\d+$/;
         passed = r.test(input.value);
-        msg = 'Invalid. Only digits are allowed.';
+        msg = 'Only digits are allowed.';
     }
 
     handleUiErrors(msg, passed);
@@ -196,6 +198,8 @@ function renderEditPage() {
     html += ".";
     html += "</p>";
     html += "<div id='hidden_div' style='display: none;'></div>"
+
+    htmlFooter += "<div class='help-container'><a class='help-link' href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank'>?</a></div>";
 
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;

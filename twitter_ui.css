@@ -51,7 +51,19 @@
 	margin-bottom: 6px;
 }
 
-/*.twitter-timeline-error {
-	color: #ff0000;
+.help-container {
+	text-align: center;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: thin;
+	border-color: black;
+
+	.help-link {
+		font-size: 18px;
+		text-decoration: none;
+		color: black;
+		font-weight: bold;
+	}
 }
-*/
