@@ -214,7 +214,7 @@ function renderEditPage() {
 }
 
 function isTimelineShow() {
-    frames = document.getElementsByTagName('iframe');
+    var frames = document.getElementsByTagName('iframe');
     for (var i = 0; i < frames.length; i++) {
         if (frames[i].id != null && frames[i].id.indexOf('twitter-widget') > -1) return true;
     }
@@ -239,7 +239,7 @@ function insertTimeline() {
     } else {
         target = {sourceType: 'profile', screenName: getTimelineName(state.timeline)};
     }
-    var frame = {};
+
     twttr.widgets.createTimeline(target, body, options).then(function(f) {
         twttr.ready(function (twttr) {
             if (state.timelineType == 'widget_timeline') {
