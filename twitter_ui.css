@@ -59,11 +59,11 @@
 	border-style: solid;
 	border-width: thin;
 	border-color: black;
+}
 
-	.help-link {
-		font-size: 18px;
-		text-decoration: none;
-		color: black;
-		font-weight: bold;
-	}
+.help-link {
+	font-size: 18px;
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
 }
