@@ -218,7 +218,7 @@ function renderEditPage() {
     html += "</p>";
     html += "<div id='hidden_div' style='display: none;'></div>"
 
-    htmlFooter += "<div class='help-container'><a class='help-link' href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank' title='Help'>?</a></div>";
+    htmlFooter += "<a href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank' title='Help'><div id='help_icon'></div></a>";
 
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
