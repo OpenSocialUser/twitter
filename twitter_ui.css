@@ -12,6 +12,17 @@
 
 }
 
+#header h3 {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#header .help {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 5px;
+}
+
 #footer {
 	float: right;
 	margin-right: 10px;
@@ -52,10 +63,8 @@
 }
 
 #help_icon {
-	margin-top: 10px;
-	margin-left: 10px;
-	width: 22px;
-	height: 22px;
-	background-image: url('http://opensocialuser.github.io/help_icon.png');
+	width: 16px;
+	height: 16px;
+	background-image: url('http://opensocialuser.github.io/jam_help_icon.png');
 	background-size: contain;
 }
