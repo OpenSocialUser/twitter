@@ -61,7 +61,7 @@ function validateInput() {
     var input = el[0];
     var passed = false;
     var msg = '';
-    if (input.value == '@') {
+    if (input.value == '@' || input.value == '') {
         msg = 'The input is not existing timeline.';
     } else if (input.id == 'timeline') {
         var r = /^@[a-z0-9_]+$/i;
@@ -73,24 +73,29 @@ function validateInput() {
         msg = 'Only digits are allowed.';
     }
 
-    handleUiErrors(msg, passed);
+    handleUiErrors('timeline', msg, passed);
     return passed;
 }
 
-function handleUiErrors(message, clean) {
+function handleUiErrors(type, message, clean) {
+    if (type == null) type = 'general';
     if (clean == null) clean = true;
 
     var input = document.getElementsByClassName('twitter-input')[0];
-    var span = document.getElementById('error_txt');
+    var timelineSpan = document.getElementById('timeline_error');
+    var generalSpan = document.getElementById('general_error');
 
     if (clean) {
         input.style.borderStyle='';
         input.style.borderColor = '';
-        span.textContent = '';
+        timelineSpan.textContent = '';
+        generalSpan.textContent = '';
+    } else if (type == 'general') {
+        generalSpan.textContent = message;
     } else {
         input.style.borderStyle='solid';
         input.style.borderColor = 'red';
-        span.textContent = message;
+        timelineSpan.textContent = message;
     }
 }
 
@@ -148,23 +153,30 @@ function saveTimeline() {
         timeline = document.getElementById('timeline').value;
     }
 
-    receiveTimeline(timelineType, timeline).then(function(f) {
-        document.getElementById('hidden_div').innerHTML = '';
-        handleUiErrors('The input is not existing timeline.', f != null);
-
-        if (f == null) {
+    osapi.people.getOwner().execute(function(data) {
+        if (data.id == null) {
             handleSaveButton(false);
-            return;
+            handleUiErrors('general', 'Changes cannot be saved. Please reload the page and try again.', false);
+        } else {
+            receiveTimeline(timelineType, timeline).then(function(f) {
+                document.getElementById('hidden_div').innerHTML = '';
+                handleUiErrors('timeline', 'The input is not existing timeline.', f != null);
+
+                if (f == null) {
+                    handleSaveButton(false);
+                    return;
+                }
+
+                isOnSave = true;
+
+                var state = wave.getState();
+                state.submitDelta({
+                    'timeline': timeline,
+                    'timeline_type': timelineType
+                });
+            });
         }
-
-        isOnSave = true;
-
-        var state = wave.getState();
-        state.submitDelta({
-            'timeline': timeline,
-            'timeline_type': timelineType
-        });
-    });
+    })
 }
 
 function renderTimelineInput(timelineType, timeline) {
@@ -179,7 +191,7 @@ function renderTimelineInput(timelineType, timeline) {
         html += "<p class='label'>Enter User Timeline:</p>";
         html += "<input id='timeline' class='twitter-input' type='text' placeholder='e.g. @twitter' "+value+" />";
     }
-    html += "<span id='error_txt' style='display: block;'></span>"
+    html += "<span id='timeline_error' class='error-txt'></span>"
 
     document.getElementById('timeline_input_container').innerHTML = html;
 }
@@ -204,7 +216,8 @@ function renderEditPage() {
     html += "</select>"
 
     html += "<div id='timeline_input_container'></div>"
-    html += "</br>";
+
+    html += "<span id='general_error' class='error-txt' style='margin-top: 10px;'></span>"
 
     html += "<button id='saveButton' onclick='saveTimeline()'>Save</button>";
     html += "<button id='cancelButton' onclick='cancelEdit()'>Cancel</button>";
