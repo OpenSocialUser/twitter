@@ -480,9 +480,11 @@ function renderTwitter() {
 
     isOnSave = false;
     
-    if (readyToInsertTimeline() && isOwner) {
+    if (readyToInsertTimeline()) {
     	insertTimeline();
-    } else { renderEditPage(); }
+    } else if (isOwner && !(isJamGroupOverviewPage() || isJamHomeViewPage())) {
+    	renderEditPage();
+    }
 }
 
 function init() {
