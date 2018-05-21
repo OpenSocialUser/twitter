@@ -82,8 +82,12 @@ var errorMessages = {
 
 function getState() {
     var state = wave.getState();
-    var twitterType = state.get("timeline_type");
-
+    var twitterType = state.get("type");
+    // May be it's old Widget data (before SJR-63). Let's check old version of property. 
+    if (twitterType == null || twitterType === "") {
+    	twitterType = state.get("timeline_type");
+    }
+	// Fallback to default Widget type if it's not defined.
     if (twitterType == null || twitterType === "") {
         twitterType = twitterTypes.user;
     }
@@ -203,9 +207,9 @@ function validateInputs() {
 	return isValid;
 }
 
-function receiveTimeline(type, options, element) {
+function receiveTimeline(options, element) {
 	var params = {};
-	switch(type) {
+	switch(options.type) {
 		case twitterTypes.user:
 		case twitterTypes.like:
 			params.screenName = getTwitterUsername(options.screenName);
@@ -219,7 +223,7 @@ function receiveTimeline(type, options, element) {
 		case twitterTypes.collection:
 			params.id = getTwitterUsername(options.id);
 	}
-	var target = Object.assign({ sourceType: type }, params);
+	var target = Object.assign({ sourceType: options.type }, params);
     return twttr.widgets.createTimeline(target, element);
 }
 
@@ -249,13 +253,13 @@ function handleSaveButton(saving) {
     }
 }
 
-function receiveTwitterCallback(f, twitterType, delta) {
+function receiveTwitterCallback(f, delta) {
     document.getElementById("hidden_div").innerHTML = "";
 
     var message = errorMessages.notExist;
-    if (twitterType === twitterTypes.user ||
-    	twitterType === twitterTypes.list ||
-    	twitterType === twitterTypes.like) { message = errorMessages.inaccessible; }
+    if (delta.type === twitterTypes.user ||
+    	delta.type === twitterTypes.list ||
+    	delta.type === twitterTypes.like) { message = errorMessages.inaccessible; }
     handleGeneralError(message, f != null);
 
     if (f == null) {
@@ -275,7 +279,7 @@ function saveTwitter() {
     handleSaveButton();
 
     var twitterType = document.getElementById("twitter_type").value;
-    var delta = { "type": twitterType };
+    var delta = { type: twitterType };
     var identifier = document.getElementById(twitterType).value;
     
 	switch(twitterType) {
@@ -306,12 +310,12 @@ function saveTwitter() {
         		case twitterTypes.tweet:
         		case twitterTypes.video:
         			receiveTweet(twitterType, delta.id, hiddenElement).then(function(f) {
-        				receiveTwitterCallback(f, twitterType, delta);
+        				receiveTwitterCallback(f, delta);
         			});
         			break;
         		default:
-		        	receiveTimeline(twitterType, delta, hiddenElement).then(function(f) {
-		                receiveTwitterCallback(f, twitterType, delta);
+		        	receiveTimeline(delta, hiddenElement).then(function(f) {
+		                receiveTwitterCallback(f, delta);
 		            });
         	}
         }
@@ -457,7 +461,7 @@ function insertTimeline() {
 			});
 			break;
 		default:
-        	receiveTimeline(state.type, state, body).then(function() {
+        	receiveTimeline(state, body).then(function() {
                 twttr.ready(function () { adjustSize(500); });
             });
 	}
