@@ -467,19 +467,25 @@ function cancelEdit() {
     if (state.timeline != null && state.timeline !== "") {insertTimeline();}
 }
 
+function stateHasAttribute(attribute) {
+	return attribute != null && attribute !== ""
+}
+
 function renderTwitter() {
-    if (!wave.getState()) {return;}
+    if (!wave.getState()) { return; }
     checkIfOwner();
-    if (!isOnSave && isEditPageShown()) {return;}
+    if (!isOnSave && isEditPageShown()) { return; }
 
     isOnSave = false;
 
     var state = getState();
-    if (state.timeline != null && state.timeline !== "") {
-        insertTimeline();
-    } else {
-        if (isOwner) {renderEditPage();}
-    }
+	for (var parameter in state) {
+	  if ((state[parameter] == null || state[parameter] === "") && isOwner) {
+	    renderEditPage();
+	    return;
+	  }
+	}
+	insertTimeline();
 }
 
 function init() {
