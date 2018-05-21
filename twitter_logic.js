@@ -322,8 +322,6 @@ function renderTwitterInput(options) {
     var html = "";
     var value = "";
     var twitterType = options.type;
-    // SJR-63 Widget Type is not supported by Twitter from 25-May-2018
-    if (twitterType === twitterTypes.widget) { twitterType = twitterTypes.user; }
     
     switch(twitterType) {
     	case twitterTypes.list:
@@ -375,7 +373,7 @@ function renderEditPage() {
 
     html += "<p class='label'>Select Widget Type:</p>";
     html += "<select id='twitter_type'>";
-    html += "<option value='profile' selected>User Timeline</option>";
+    html += "<option value='profile' selected='selected'>User Timeline</option>";
     // html += "<option value='widget'>Widget Timeline</option>";
     html += "<option value='list'>List Timeline</option>";
     html += "<option value='collection'>Collection Timeline</option>";
@@ -409,11 +407,15 @@ function renderEditPage() {
     document.getElementById("header").innerHTML = htmlHeader;
 
 	var state = getState();
+	var twitterType = state.type;
+	// SJR-63 Widget Type is not supported by Twitter from 25-May-2018
+    if (twitterType === twitterTypes.widget) { state = { type: twitterTypes.user }; }
+
     document.getElementById("twitter_type").value = state.type;
     renderTwitterInput(state);
 
     document.getElementById("twitter_type").onchange = function() {
-    	renderTwitterInput(state);
+    	renderTwitterInput({type: this.value});
     };
 }
 
