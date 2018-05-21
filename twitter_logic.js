@@ -203,7 +203,6 @@ function validateInputs() {
 	return isValid;
 }
 
-
 function receiveTimeline(type, options, element) {
 	var params = {};
 	switch(type) {
@@ -462,13 +461,16 @@ function insertTimeline() {
 	}
 }
 
-function cancelEdit() {
-    var state = getState();
-    if (state.timeline != null && state.timeline !== "") {insertTimeline();}
+function readyToInsertTimeline() {
+	var state = getState();
+	for (var parameter in state) {
+	  if (state[parameter] == null || state[parameter] === "") { return false; }
+	}
+	return true;
 }
 
-function stateHasAttribute(attribute) {
-	return attribute != null && attribute !== ""
+function cancelEdit() {
+    if (readyToInsertTimeline()) { insertTimeline(); }
 }
 
 function renderTwitter() {
@@ -477,15 +479,10 @@ function renderTwitter() {
     if (!isOnSave && isEditPageShown()) { return; }
 
     isOnSave = false;
-
-    var state = getState();
-	for (var parameter in state) {
-	  if ((state[parameter] == null || state[parameter] === "") && isOwner) {
-	    renderEditPage();
-	    return;
-	  }
-	}
-	insertTimeline();
+    
+    if (readyToInsertTimeline() && isOwner) {
+    	insertTimeline();
+    } else { renderEditPage(); }
 }
 
 function init() {
