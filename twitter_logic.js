@@ -426,9 +426,15 @@ function renderEditPage() {
 }
 
 function isTimelineShown() {
+	// Check UserTimeline, Moment, Collection, List, Likes
     var frames = document.getElementsByTagName("iframe");
     for (var i = 0; i < frames.length; i++) {
         if (frames[i].id != null && frames[i].id.indexOf("twitter-widget") > -1) {return true;}
+    }
+    // Check EmbeddedTweet, EmbeddedVideo
+    var twitterwidgets = document.getElementsByTagName("twitterwidget");
+    for (var j = 0; j < twitterwidgets.length; j++) {
+        if (twitterwidgets[j].id != null && twitterwidgets[j].id.indexOf("twitter-widget") > -1) {return true;}
     }
     return false;
 }
@@ -480,20 +486,6 @@ function readyToInsertTimeline() {
 function cancelEdit() {
     if (readyToInsertTimeline()) { insertTimeline(); }
 }
-
-// function renderTwitter() {
-//     if (!wave.getState()) { return; }
-//     checkIfOwner();
-//     if (!isOnSave && isEditPageShown()) { return; }
-
-//     isOnSave = false;
-    
-//     if (readyToInsertTimeline()) {
-//     	insertTimeline();
-//     } else if (isOwner && !(isJamGroupOverviewPage() || isJamHomeViewPage())) {
-//     	renderEditPage();
-//     }
-// }
 
 function renderTwitter() {
     if (!wave.getState()) { return; }
