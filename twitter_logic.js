@@ -34,7 +34,10 @@ function renderEditButton() {
 }
 
 function checkIfOwner(callback) {
-    if (isOwner != null) { return; }
+    if (isOwner != null) {
+    	callback();
+    	return;
+    }
 
     var userId = null;
     var ownerId = null;
@@ -44,7 +47,6 @@ function checkIfOwner(callback) {
             userId = data.id;
             if (ownerId != null && userId != null) {
                 isOwner = (ownerId === userId);
-                // renderEditButton();
                 callback();
             }
         });
