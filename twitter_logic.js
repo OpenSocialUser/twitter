@@ -270,7 +270,6 @@ function receiveTwitterCallback(f, delta) {
         handleSaveButton(false);
         return;
     }
-
     isOnSave = true;
 
     var state = wave.getState();
@@ -278,8 +277,10 @@ function receiveTwitterCallback(f, delta) {
 }
 
 function saveTwitter() {
-    if (!validateInputs()) {return;}
+	// Clean general error message first.
+	handleGeneralError(null, true);
 
+    if (!validateInputs()) { return; }
     handleSaveButton();
 
     var twitterType = document.getElementById("twitter_type").value;
@@ -486,7 +487,9 @@ function readyToInsertTimeline() {
 }
 
 function cancelEdit() {
-    if (readyToInsertTimeline()) { insertTimeline(); }
+    if (!readyToInsertTimeline()) { return; }
+	insertTimeline();
+	renderEditButton();
 }
 
 function renderTwitter() {
