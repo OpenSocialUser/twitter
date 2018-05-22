@@ -33,7 +33,7 @@ function renderEditButton() {
     footer.appendChild(button);
 }
 
-function checkIfOwner() {
+function checkIfOwner(callback) {
     if (isOwner != null) { return; }
 
     var userId = null;
@@ -44,7 +44,8 @@ function checkIfOwner() {
             userId = data.id;
             if (ownerId != null && userId != null) {
                 isOwner = (ownerId === userId);
-                renderEditButton();
+                // renderEditButton();
+                callback();
             }
         });
     });
@@ -216,6 +217,7 @@ function receiveTimeline(options, element) {
 			break;
 		case twitterTypes.list:
 			params.ownerScreenName = getTwitterUsername(options.ownerScreenName);
+			params.slug = options.slug;
 			break;
 		case twitterTypes.widget:
 			params.widgetId = getTwitterUsername(options.widgetId);
@@ -479,18 +481,34 @@ function cancelEdit() {
     if (readyToInsertTimeline()) { insertTimeline(); }
 }
 
+// function renderTwitter() {
+//     if (!wave.getState()) { return; }
+//     checkIfOwner();
+//     if (!isOnSave && isEditPageShown()) { return; }
+
+//     isOnSave = false;
+    
+//     if (readyToInsertTimeline()) {
+//     	insertTimeline();
+//     } else if (isOwner && !(isJamGroupOverviewPage() || isJamHomeViewPage())) {
+//     	renderEditPage();
+//     }
+// }
+
 function renderTwitter() {
     if (!wave.getState()) { return; }
-    checkIfOwner();
     if (!isOnSave && isEditPageShown()) { return; }
-
     isOnSave = false;
+
+    if (readyToInsertTimeline()) { insertTimeline(); }
     
-    if (readyToInsertTimeline()) {
-    	insertTimeline();
-    } else if (isOwner && !(isJamGroupOverviewPage() || isJamHomeViewPage())) {
-    	renderEditPage();
-    }
+    checkIfOwner(function() {
+    	if (isOwner && !(isJamGroupOverviewPage() || isJamHomeViewPage())) {
+    		if (readyToInsertTimeline()) {
+    			renderEditButton();
+    		} else { renderEditPage(); }
+    	}
+    });
 }
 
 function init() {
